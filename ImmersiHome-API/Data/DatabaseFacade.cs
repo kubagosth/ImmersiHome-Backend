@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using System.Text;
+using System.IO;
 
 namespace ImmersiHome_API.Data
 {
@@ -12,61 +13,63 @@ namespace ImmersiHome_API.Data
             _connectionString = connectionString;
         }
 
-        public async Task InsertBatchAsync(string tableName, IEnumerable<Dictionary<string, object>> rows)
+        public async Task InsertBatchAsync(string targetTableName, IEnumerable<Dictionary<string, object>> records)
         {
+            if (string.IsNullOrEmpty(targetTableName))
+                throw new ArgumentException("Table name cannot be null or empty.", nameof(targetTableName));
+
+            if (records == null || !records.Any())
+                throw new ArgumentException("Records cannot be null or empty.", nameof(records));
+
             using NpgsqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
 
-            using NpgsqlTransaction transaction = await connection.BeginTransactionAsync();
-            try
+            using NpgsqlBinaryImporter writer = connection.BeginBinaryImport($"COPY {targetTableName} ({string.Join(", ", records.First().Keys)}) FROM STDIN (FORMAT BINARY)");
+            foreach (var record in records)
             {
-                foreach (var row in rows)
+                writer.StartRow();
+                foreach (var value in record.Values)
                 {
-                    await InsertAsync(tableName, row);
+                    writer.Write(value ?? DBNull.Value);
                 }
+            }
 
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            await writer.CompleteAsync();
         }
 
-        public async Task InsertAsync(string tableName, Dictionary<string, object> keyValuePairs)
+        public async Task InsertAsync(string targetTableName, Dictionary<string, object> columnValueMapping)
         {
-            if (string.IsNullOrEmpty(tableName))
-                throw new ArgumentException("Table name cannot be null or empty.", nameof(tableName));
+            if (string.IsNullOrEmpty(targetTableName))
+                throw new ArgumentException("Table name cannot be null or empty.", nameof(targetTableName));
 
-            if (keyValuePairs == null || keyValuePairs.Count == 0)
-                throw new ArgumentException("Key-value pairs cannot be null or empty.", nameof(keyValuePairs));
+            if (columnValueMapping == null || columnValueMapping.Count == 0)
+                throw new ArgumentException("Column-value mappings cannot be null or empty.", nameof(columnValueMapping));
 
-            StringBuilder columnNames = new();
-            StringBuilder parameterNames = new();
-            List<NpgsqlParameter> parameters = [];
+            StringBuilder columnList = new();
+            StringBuilder parameterList = new();
+            List<NpgsqlParameter> queryParameters = new();
 
-            foreach (var keyPairs in keyValuePairs)
+            foreach (var columnValue in columnValueMapping)
             {
-                if (columnNames.Length > 0)
+                if (columnList.Length > 0)
                 {
-                    columnNames.Append(", ");
-                    parameterNames.Append(", ");
+                    columnList.Append(", ");
+                    parameterList.Append(", ");
                 }
 
-                columnNames.Append(keyPairs.Key);
-                parameterNames.Append($"@{keyPairs.Key}");
+                columnList.Append(columnValue.Key);
+                parameterList.Append($"@{columnValue.Key}");
 
-                parameters.Add(new NpgsqlParameter($"@{keyPairs.Key}", keyPairs.Value ?? DBNull.Value));
+                queryParameters.Add(new NpgsqlParameter($"@{columnValue.Key}", columnValue.Value ?? DBNull.Value));
             }
 
-            string query = $"INSERT INTO {tableName} ({columnNames}) VALUES ({parameterNames});";
+            string query = $"INSERT INTO {targetTableName} ({columnList}) VALUES ({parameterList});";
 
             using NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
 
             using NpgsqlCommand command = new NpgsqlCommand(query, connection);
-            command.Parameters.AddRange(parameters.ToArray());
+            command.Parameters.AddRange(queryParameters.ToArray());
 
             await command.ExecuteNonQueryAsync();
         }
