@@ -33,3 +33,7 @@ jobs:
     - name: Test
       working-directory: ./ImmersiHome-API
       run: dotnet test --no-build --verbosity normal
+
+    - name: Publish
+      working-directory: ./ImmersiHome-API
+      run: dotnet publish -c Release -o ./publish
