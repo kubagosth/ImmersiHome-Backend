@@ -1,7 +1,6 @@
-﻿using ImmersiHome_API.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ImmersiHome_API.Controllers
+namespace ImmersiHome_API.Temp
 {
     [ApiController]
     [Route("api/[controller]")]

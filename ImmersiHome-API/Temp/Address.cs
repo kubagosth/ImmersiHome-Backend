@@ -1,4 +1,4 @@
-﻿namespace ImmersiHome_API.Models
+﻿namespace ImmersiHome_API.Temp
 {
     public class Address
     {

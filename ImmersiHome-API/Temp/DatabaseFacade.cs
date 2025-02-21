@@ -2,7 +2,7 @@
 using System.Text;
 using System.IO;
 
-namespace ImmersiHome_API.Data
+namespace ImmersiHome_API.Temp
 {
     public class DatabaseFacade
     {
