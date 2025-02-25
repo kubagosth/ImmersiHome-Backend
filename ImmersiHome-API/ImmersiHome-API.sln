@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmersiHome-API", "ImmersiHome-API.csproj", "{783E410F-AFED-4F8D-A106-2584348F2736}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiStressTest", "..\ApiStressTest\ApiStressTest.csproj", "{D04398D2-4E0C-4F45-872B-84F933A37FDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{783E410F-AFED-4F8D-A106-2584348F2736}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{783E410F-AFED-4F8D-A106-2584348F2736}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{783E410F-AFED-4F8D-A106-2584348F2736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D04398D2-4E0C-4F45-872B-84F933A37FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04398D2-4E0C-4F45-872B-84F933A37FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04398D2-4E0C-4F45-872B-84F933A37FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04398D2-4E0C-4F45-872B-84F933A37FDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
