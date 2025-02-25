@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BoligPletten.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+423d0ae8e75ed64b49517f2a15b86378eedfb6f0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0db7acd2fd2125fc8872a0edd9cd63052dead2de")]
 [assembly: System.Reflection.AssemblyProductAttribute("BoligPletten.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BoligPletten.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
