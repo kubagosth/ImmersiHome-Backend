@@ -1,0 +1,12 @@
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\bin\Debug\net9.0\BoligPletten.Domain.deps.json
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\bin\Debug\net9.0\BoligPletten.Domain.dll
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\bin\Debug\net9.0\BoligPletten.Domain.pdb
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.AssemblyInfoInputs.cache
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.AssemblyInfo.cs
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.csproj.CoreCompileInputs.cache
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.sourcelink.json
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.dll
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\refint\BoligPletten.Domain.dll
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\BoligPletten.Domain.pdb
+C:\Code\ImmersiHome-Backend\src\BoligPletten.Core\BoligPletten.Domain\obj\Debug\net9.0\ref\BoligPletten.Domain.dll
