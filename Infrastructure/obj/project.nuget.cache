@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "0S9C85zeDuw=",
+  "success": true,
+  "projectFilePath": "C:\\Code\\ImmersiHome-Backend\\Infrastructure\\Infrastructure.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\beho5\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.2\\microsoft.extensions.dependencyinjection.abstractions.9.0.2.nupkg.sha512",
+    "C:\\Users\\beho5\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\beho5\\.nuget\\packages\\microsoft.extensions.objectpool\\9.0.2\\microsoft.extensions.objectpool.9.0.2.nupkg.sha512",
+    "C:\\Users\\beho5\\.nuget\\packages\\microsoft.extensions.options\\9.0.2\\microsoft.extensions.options.9.0.2.nupkg.sha512",
+    "C:\\Users\\beho5\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.2\\microsoft.extensions.primitives.9.0.2.nupkg.sha512",
+    "C:\\Users\\beho5\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

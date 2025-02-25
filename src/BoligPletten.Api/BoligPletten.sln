@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DAEBE468-E660-4830-B973-40F58D53CEA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoligPletten.Core", "BoligPletten.Core", "{DAE45A30-3B7B-45B3-BD0A-80A0E5EDFDAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligPletten.Application", "..\BoligPletten.Core\BoligPletten.Application\BoligPletten.Application.csproj", "{49E92E23-B30C-4D70-9922-602D9092473F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligPletten.Domain", "..\BoligPletten.Core\BoligPletten.Domain\BoligPletten.Domain.csproj", "{D2E16F0D-F8AE-4F90-85B3-DB3ED8C38D6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligPletten.Infrastructure", "..\BoligPletten.Core\BoligPletten.Infrastructure\BoligPletten.Infrastructure.csproj", "{023B3064-29EE-4E66-8A27-439732AD71D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoligPletten.Api", "BoligPletten.Api.csproj", "{4D6D60EA-31B6-4B01-BFB0-18B53A0399A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49E92E23-B30C-4D70-9922-602D9092473F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E92E23-B30C-4D70-9922-602D9092473F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E92E23-B30C-4D70-9922-602D9092473F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E92E23-B30C-4D70-9922-602D9092473F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2E16F0D-F8AE-4F90-85B3-DB3ED8C38D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2E16F0D-F8AE-4F90-85B3-DB3ED8C38D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2E16F0D-F8AE-4F90-85B3-DB3ED8C38D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2E16F0D-F8AE-4F90-85B3-DB3ED8C38D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{023B3064-29EE-4E66-8A27-439732AD71D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{023B3064-29EE-4E66-8A27-439732AD71D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{023B3064-29EE-4E66-8A27-439732AD71D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{023B3064-29EE-4E66-8A27-439732AD71D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D6D60EA-31B6-4B01-BFB0-18B53A0399A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D6D60EA-31B6-4B01-BFB0-18B53A0399A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D6D60EA-31B6-4B01-BFB0-18B53A0399A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D6D60EA-31B6-4B01-BFB0-18B53A0399A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DAE45A30-3B7B-45B3-BD0A-80A0E5EDFDAB} = {DAEBE468-E660-4830-B973-40F58D53CEA0}
+		{49E92E23-B30C-4D70-9922-602D9092473F} = {DAE45A30-3B7B-45B3-BD0A-80A0E5EDFDAB}
+		{D2E16F0D-F8AE-4F90-85B3-DB3ED8C38D6B} = {DAE45A30-3B7B-45B3-BD0A-80A0E5EDFDAB}
+		{023B3064-29EE-4E66-8A27-439732AD71D7} = {DAE45A30-3B7B-45B3-BD0A-80A0E5EDFDAB}
+		{4D6D60EA-31B6-4B01-BFB0-18B53A0399A0} = {DAEBE468-E660-4830-B973-40F58D53CEA0}
+	EndGlobalSection
+EndGlobal
