@@ -28,7 +28,7 @@ namespace ImmersiHome_API
             services.AddDbConnectionPooling(options =>
             {
                 options.ConnectionString = configuration.GetConnectionString("DefaultConnection") ?? "GG";
-                options.MaxPoolSize = configuration.GetValue<int>("Database:MaxPoolSize", 100);
+                options.MaxPoolSize = configuration.GetValue<int>("Database:MaxPoolSize", 15000);
                 options.MinPoolSize = configuration.GetValue<int>("Database:MinPoolSize", 10);
                 options.CommandTimeout = TimeSpan.FromSeconds(configuration.GetValue<int>("Database:CommandTimeoutSeconds", 30));
             });

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ApiStressTest
+﻿namespace ApiStressTest
 {
     public class EndpointStatistics
     {
         public string Endpoint { get; }
-        public long TotalRequests { get; set; }
-        public long SuccessfulRequests { get; set; }
-        public long FailedRequests { get; set; }
-        public long TotalResponseTime { get; set; }
-        public long MinResponseTime { get; set; }
-        public long MaxResponseTime { get; set; }
+        public long TotalRequests;
+        public long SuccessfulRequests;
+        public long FailedRequests;
+        public long TotalResponseTime;
+        public long MinResponseTime;
+        public long MaxResponseTime;
 
         public double AverageResponseTime => TotalRequests > 0 ? (double)TotalResponseTime / TotalRequests : 0;
         public double SuccessPercentage => TotalRequests > 0 ? (double)SuccessfulRequests / TotalRequests : 0;
@@ -23,7 +17,12 @@ namespace ApiStressTest
         public EndpointStatistics(string endpoint)
         {
             Endpoint = endpoint;
+            TotalRequests = 0;
+            SuccessfulRequests = 0;
+            FailedRequests = 0;
+            TotalResponseTime = 0;
             MinResponseTime = long.MaxValue;
+            MaxResponseTime = 0;
         }
     }
 }

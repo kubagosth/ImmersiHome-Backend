@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiStressTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ede17434447b02f31e2bd766a05755c28ec84eb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b45e3180fa83372b601d164c51e1dc78b663aaa")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiStressTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiStressTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
