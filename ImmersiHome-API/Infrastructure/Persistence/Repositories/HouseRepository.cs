@@ -20,20 +20,26 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories
         // Static constructor to initialize SQL templates
         static HouseRepository()
         {
+            // Get column names for more explicit SQL queries
+            var columns = string.Join(", ", EntityReflectionCache<HouseEntity>.GetColumns(true));
+
             // Pre-compute frequently used SQL queries for better performance
-            _recentlyListedHousesSql = $"SELECT * FROM {nameof(HouseEntity)} WHERE IsDeleted = FALSE ORDER BY ListedDate DESC LIMIT @Count";
+            _recentlyListedHousesSql = $"SELECT {columns} FROM {nameof(HouseEntity)} WHERE IsDeleted = FALSE ORDER BY ListedDate DESC LIMIT @Count";
 
             // Create optimized geospatial query template
             const decimal EarthRadiusKm = 6371m;
             var geoBuilder = new StringBuilder(512); // Pre-allocate for performance
 
-            geoBuilder.Append("SELECT *, (");
-            geoBuilder.Append($"{EarthRadiusKm} * acos(cos(radians(@lat)) * cos(radians(Latitude)) ");
-            geoBuilder.Append(" * cos(radians(Longitude) - radians(@lon)) + sin(radians(@lat)) * sin(radians(Latitude)))");
+            // Define the distance calculation expression
+            string distanceCalc = $"{EarthRadiusKm} * acos(cos(radians(@lat)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@lon)) + sin(radians(@lat)) * sin(radians(Latitude)))";
+
+            geoBuilder.Append($"SELECT {columns}, (");
+            geoBuilder.Append(distanceCalc);
             geoBuilder.Append(") AS Distance ");
             geoBuilder.Append($"FROM {nameof(HouseEntity)} ");
             geoBuilder.Append("WHERE IsDeleted = FALSE ");
-            geoBuilder.Append("HAVING Distance <= @radius ");
+            // Use the full distance calculation in the WHERE clause instead of referring to the alias
+            geoBuilder.Append($"AND ({distanceCalc}) <= @radius ");
             geoBuilder.Append("ORDER BY Distance ASC");
 
             _geoDistanceQueryTemplate = geoBuilder.ToString();
@@ -150,9 +156,12 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories
                 yield break;
             }
 
+            // Get column names for explicit SQL
+            var columns = string.Join(", ", EntityReflectionCache<HouseEntity>.GetColumns(true).Select(c => "h." + c));
+
             // Create dynamic query for amenities (example implementation)
             var sqlBuilder = new StringBuilder(256);
-            sqlBuilder.Append("SELECT h.* FROM ");
+            sqlBuilder.Append($"SELECT {columns} FROM ");
             sqlBuilder.Append(nameof(HouseEntity));
             sqlBuilder.Append(" h JOIN HouseAmenities ha ON h.Id = ha.HouseId ");
             sqlBuilder.Append("WHERE h.IsDeleted = FALSE AND ha.AmenityName = ANY(@Amenities) ");
@@ -169,14 +178,14 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories
             };
 
             using var command = PrepareCommand(sqlBuilder.ToString(), parameters);
-            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellationToken).ConfigureAwait(false);
 
-            var columns = GetReaderColumns(reader);
+            var readerColumns = GetReaderColumns(reader);
 
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var entity = MapReaderToEntity(reader, columns);
+                var entity = MapReaderToEntity(reader, readerColumns);
                 yield return _mapper.MapToModel(entity);
             }
         }
@@ -216,8 +225,11 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories
             int limit = 10,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
+            // Get column names for explicit SQL
+            var columns = string.Join(", ", EntityReflectionCache<HouseEntity>.GetColumns(true));
+
             string sql = $@"
-                SELECT * FROM {nameof(HouseEntity)} 
+                SELECT {columns} FROM {nameof(HouseEntity)} 
                 WHERE IsDeleted = FALSE 
                 AND ListedDate >= @CutoffDate
                 ORDER BY ListedDate DESC
@@ -230,24 +242,16 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories
             };
 
             using var command = PrepareCommand(sql, parameters);
-            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellationToken).ConfigureAwait(false);
 
-            var columns = GetReaderColumns(reader);
+            var readerColumns = GetReaderColumns(reader);
 
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var entity = MapReaderToEntity(reader, columns);
+                var entity = MapReaderToEntity(reader, readerColumns);
                 yield return _mapper.MapToModel(entity);
             }
-        }
-
-        /// <summary>
-        /// Submit method required by UnitOfWork implementation
-        /// </summary>
-        public void Submit()
-        {
-            // Nothing to do here as transaction handling is managed by UnitOfWork
         }
     }
 }

@@ -43,6 +43,17 @@ namespace ImmersiHome_API
                     return new HouseRepository(conn, trans, mapper);
                 });
 
+            // Register Unit of Work
+            services.AddScoped<IUnitOfWork>(sp =>
+            {
+                var connectionPool = sp.GetRequiredService<Microsoft.Extensions.ObjectPool.ObjectPool<IDbConnection>>();
+                var houseRepoFactory = sp.GetRequiredService<Func<IDbConnection, IDbTransaction, IHouseRepository>>();
+
+                return new PooledUnitOfWork(
+                    connectionPool,
+                    houseRepoFactory);
+            });
+
             // Register services
             services.AddScoped<IHouseService, HouseService>();
 

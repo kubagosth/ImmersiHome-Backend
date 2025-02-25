@@ -17,14 +17,14 @@ namespace ImmersiHome_API.Infrastructure.Persistence
             services.Configure(configureOptions);
 
             // Register policy
-            services.AddSingleton<Microsoft.Extensions.ObjectPool.IPooledObjectPolicy<IDbConnection>, DbConnectionPoolPolicy>();
+            services.AddSingleton<IPooledObjectPolicy<IDbConnection>, DbConnectionPoolPolicy>();
 
             // Register pool using fully qualified names to avoid confusion
-            services.AddSingleton<Microsoft.Extensions.ObjectPool.ObjectPool<IDbConnection>>(sp =>
+            services.AddSingleton<ObjectPool<IDbConnection>>(sp =>
             {
-                var policy = sp.GetRequiredService<Microsoft.Extensions.ObjectPool.IPooledObjectPolicy<IDbConnection>>();
+                var policy = sp.GetRequiredService<IPooledObjectPolicy<IDbConnection>>();
                 var options = sp.GetRequiredService<IOptions<DbConnectionOptions>>();
-                return new Microsoft.Extensions.ObjectPool.DefaultObjectPool<IDbConnection>(
+                return new DefaultObjectPool<IDbConnection>(
                     policy,
                     options.Value.MaxPoolSize);
             });

@@ -10,7 +10,7 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
         private readonly IDbConnection _connection;
         private IDbTransaction _transaction;
         private bool _disposed;
-        private readonly ObjectPool<IDbConnection> _connectionPool;
+        private readonly Microsoft.Extensions.ObjectPool.ObjectPool<IDbConnection> _connectionPool;
 
         // Factory functions for repositories
         private readonly Func<IDbConnection, IDbTransaction, IHouseRepository> _houseRepositoryFactory;
@@ -24,7 +24,7 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
         /// Initializes a new instance of the PooledUnitOfWork class
         /// </summary>
         public PooledUnitOfWork(
-            ObjectPool<IDbConnection> connectionPool,
+            Microsoft.Extensions.ObjectPool.ObjectPool<IDbConnection> connectionPool,
             Func<IDbConnection, IDbTransaction, IHouseRepository> houseRepositoryFactory)
         {
             _connectionPool = connectionPool ?? throw new ArgumentNullException(nameof(connectionPool));

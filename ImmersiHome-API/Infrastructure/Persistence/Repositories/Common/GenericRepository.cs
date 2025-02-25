@@ -132,12 +132,12 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
         }
 
         /// <summary>
-        /// Efficiently retrieves the column names from the data reader
+        /// Efficiently retrieves the column names from the data reader in order
         /// </summary>
-        protected virtual HashSet<string> GetReaderColumns(IDataReader reader)
+        protected virtual List<string> GetReaderColumns(IDataReader reader)
         {
             var fieldCount = reader.FieldCount;
-            var columns = new HashSet<string>(fieldCount, StringComparer.OrdinalIgnoreCase);
+            var columns = new List<string>(fieldCount);
 
             for (int i = 0; i < fieldCount; i++)
             {
@@ -147,23 +147,30 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
         }
 
         /// <summary>
-        /// Maps a data reader row to an entity with optimized property access
+        /// Maps a data reader row to an entity with optimized property access in sequential order
         /// </summary>
-        protected virtual TEntity MapReaderToEntity(IDataReader reader, HashSet<string> columns)
+        protected virtual TEntity MapReaderToEntity(IDataReader reader, List<string> columns)
         {
             var entity = new TEntity();
 
-            // Get cached properties for entity type
-            var entityProps = EntityReflectionCache<TEntity>.EntityProperties;
-
-            foreach (var kvp in entityProps)
+            // With SequentialAccess, we MUST access columns in order by ordinal
+            for (int i = 0; i < reader.FieldCount; i++)
             {
-                if (columns.Contains(kvp.Key))
+                string columnName = columns[i];
+
+                if (EntityReflectionCache<TEntity>.EntityProperties.TryGetValue(columnName, out var prop))
                 {
-                    var value = reader[kvp.Key];
-                    kvp.Value.SetValue(entity, value == DBNull.Value ? null : value);
+                    // Get the value for the current column (important: access in order)
+                    object value = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                    prop.SetValue(entity, value);
+                }
+                else
+                {
+                    // Must advance through the column even if we don't use it
+                    reader.GetValue(i);
                 }
             }
+
             return entity;
         }
 
@@ -505,7 +512,7 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
         public async IAsyncEnumerable<TDomain> GetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             using var command = PrepareCommand(_selectAllSql, new Dictionary<string, object?>());
-            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellationToken).ConfigureAwait(false);
 
             var columns = GetReaderColumns(reader);
 
@@ -531,7 +538,7 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
             };
 
             using var command = PrepareCommand(_selectPaginatedSql, parameters);
-            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellationToken).ConfigureAwait(false);
 
             var columns = GetReaderColumns(reader);
 
@@ -561,7 +568,7 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
             parameters.Add("@Offset", (page - 1) * pageSize);
 
             using var command = PrepareCommand(sql, parameters);
-            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellationToken).ConfigureAwait(false);
 
             var columns = GetReaderColumns(reader);
 
@@ -585,7 +592,7 @@ namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
             var parameters = new Dictionary<string, object?> { { "@Ids", ids.ToArray() } };
 
             using var command = PrepareCommand(_selectByIdsSql, parameters);
-            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess, cancellationToken).ConfigureAwait(false);
 
             var columns = GetReaderColumns(reader);
 
