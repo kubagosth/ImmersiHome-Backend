@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ImmersiHome_API.Persistence.Repositories.Common
+namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
 {
     // Utility class for caching entity metadata.
     public static class EntityReflectionCache<TEntity> where TEntity : class, new()

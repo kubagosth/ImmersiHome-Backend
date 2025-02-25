@@ -1,7 +1,7 @@
 ﻿using ImmersiHome_API.Models.Domain.Common;
 using ImmersiHome_API.Models.Entities.Common;
 
-namespace ImmersiHome_API.Persistence.Mappers
+namespace ImmersiHome_API.Infrastructure.Mappers
 {
     public interface IGenericMapper<TModel, TEntity, TKey>
         where TModel : IGenericModel<TKey>

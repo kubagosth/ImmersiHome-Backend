@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ImmersiHome_API.Models.Domain.Common;
 
-namespace ImmersiHome_API.Persistence.Repositories.Common
+namespace ImmersiHome_API.Infrastructure.Persistence.Repositories.Common
 {
     public interface IGenericRepository<TDomain, TKey>
         where TDomain : IGenericModel<TKey>

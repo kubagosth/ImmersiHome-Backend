@@ -1,56 +1,68 @@
-﻿using ImmersiHome_API.Models.Domain;
-using ImmersiHome_API.Persistence.Repositories;
-using ImmersiHome_API.Persistence.Repositories.Common;
+﻿using ImmersiHome_API.Infrastructure.Persistence.Repositories.Common;
+using ImmersiHome_API.Models.Domain;
+using System.Runtime.CompilerServices;
 
 namespace ImmersiHome_API.Services
 {
-    public class HouseService
+    public class HouseService : IHouseService
     {
-        public HouseService(IUnitOfWork unitOfWork, ILogger<HouseService> logger)
-        {
+        private readonly IUnitOfWork _unitOfWork;
 
+        public HouseService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
         }
 
-        private readonly ILogger<HouseService> _logger;
-
-        public async Task<IEnumerable<HouseModel>> GetRecentlyListedHousesAsync(int count, CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<HouseModel> GetRecentlyListedHousesAsync(
+            int count,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            try
+            // Access the repository through the UnitOfWork property
+            await foreach (var house in _unitOfWork.Houses.GetRecentlyListedHousesAsync(count, cancellationToken)
+                .ConfigureAwait(false))
             {
-                _logger.LogInformation("Retrieving {Count} recently listed houses", count);
-                var houses = new List<HouseModel>();
-                await foreach (var house in HouseRepository.GetRecentlyListedHousesAsync(count, cancellationToken))
-                {
-                    houses.Add(house);
-                }
-                _logger.LogInformation("{Count} houses retrieved", houses.Count);
-                return houses;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving recently listed houses");
-                throw new HouseServiceException("Error retrieving recently listed houses", ex);
+                yield return house;
             }
         }
 
-        public async Task<IEnumerable<HouseModel>> GetHousesByLocationAsync(decimal latitude, decimal longitude, decimal radiusInKm, CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<HouseModel> GetHousesByLocationAsync(
+            decimal latitude,
+            decimal longitude,
+            decimal radiusInKm,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            try
+            await foreach (var house in _unitOfWork.Houses.GetHousesByLocationAsync(
+                latitude, longitude, radiusInKm, cancellationToken).ConfigureAwait(false))
             {
-                _logger.LogInformation("Retrieving houses by location: lat {lat}, lon {lon}, radius {radius}", latitude, longitude, radiusInKm);
-                var houses = new List<HouseModel>();
-                await foreach (var house in HouseRepository.GetHousesByLocationAsync(latitude, longitude, radiusInKm, cancellationToken))
-                {
-                    houses.Add(house);
-                }
-                _logger.LogInformation("{Count} houses retrieved by location", houses.Count);
-                return houses;
+                yield return house;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving houses by location");
-                throw new HouseServiceException("Error retrieving houses by location", ex);
-            }
+        }
+
+        public async Task<HouseModel> AddHouseAsync(
+            HouseModel house,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await _unitOfWork.Houses.AddAsync(house, cancellationToken).ConfigureAwait(false);
+            await _unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            return result;
+        }
+
+        public async Task<HouseModel?> GetHouseByIdAsync(
+            int id,
+            CancellationToken cancellationToken = default)
+        {
+            var house = await _unitOfWork.Houses.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+            await _unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            return house;
+        }
+
+        public async Task<bool> DeleteHouseAsync(
+            int id,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await _unitOfWork.Houses.SoftDeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            await _unitOfWork.CommitAsync(cancellationToken).ConfigureAwait(false);
+            return result;
         }
     }
 }

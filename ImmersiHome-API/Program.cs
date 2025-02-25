@@ -1,8 +1,6 @@
+using ImmersiHome_API;
 using ImmersiHome_API.Models.Domain;
 using ImmersiHome_API.Models.Entities;
-using ImmersiHome_API.Persistence.Mappers;
-using ImmersiHome_API.Persistence.Repositories;
-using ImmersiHome_API.Persistence.Repositories.Common;
 using ImmersiHome_API.Services;
 using Npgsql;
 using System.Data;
@@ -13,31 +11,12 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var configuration = builder.Configuration;
-
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-        var databaseProvider = configuration.GetValue<string>("DatabaseProvider");
-
-        // Register memory cache
-        builder.Services.AddMemoryCache();
-
-        // Register database connection
-        builder.Services.AddScoped<IDbConnection>(_ =>
-        {
-            var conn = new NpgsqlConnection(connectionString);
-            conn.Open();
-            return conn;
-        });
-
         // Register services
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IGenericMapper<HouseModel, HouseEntity, int>, DefaultGenericMapper<HouseModel, HouseEntity, int>>();
-        builder.Services.AddScoped<IHouseService, HouseService>();
+        builder.Services.AddHighPerformanceServices(builder.Configuration);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddOpenApi();
-
 
         var app = builder.Build();
 
