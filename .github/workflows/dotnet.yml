@@ -37,10 +37,12 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
     - name: Build and Push Docker Image
-      working-directory: ./src/BoligPletten.Api
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/immersihome-api:latest .
+        # Navigate to the repository root
+        cd $GITHUB_WORKSPACE
+        
+        # Build the Docker image with a proper context
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/immersihome-api:latest -f ./src/BoligPletten.Api/Dockerfile .
+        
+        # Push the Docker image
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/immersihome-api:latest
-
-
-        C:\Code\ImmersiHome-Backend\src\BoligPletten.Api\BoligPletten.Api.csproj
